@@ -1,10 +1,18 @@
 FROM node:20-slim
+
+# Install LibreOffice + poppler-utils for pdftoppm
 RUN apt-get update && apt-get install -y \
-    libreoffice --no-install-recommends \
-    poppler-utils fonts-liberation fonts-dejavu \
- && rm -rf /var/lib/apt/lists/*
+    libreoffice-impress \
+    poppler-utils \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
-COPY package.json server.js ./
+COPY package.json ./
 RUN npm install
-EXPOSE 3000
+
+COPY server.js ./
+
+ENV PORT=8080
+EXPOSE 8080
+
 CMD ["node", "server.js"]
